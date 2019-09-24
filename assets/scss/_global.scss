@@ -1,0 +1,41 @@
+// VARS
+$mainColor: #45176b;
+$watermelonColor: #ff5780;
+$darkGrayColor: #868e96;
+$lightGrayColor: #eff3f3;
+$grayBorderColor: #ccc;
+
+// GLOBAL STYLING
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  outline: 0;
+  border: 0;
+  font-family: "STC";
+}
+
+body {
+  direction: rtl;
+  font-size: 18px;
+  font-weight: 500;
+  background-color: $lightGrayColor;
+  color: $darkGrayColor;
+}
+
+a {
+  text-decoration: none;
+}
+ul {
+  list-style-type: none;
+}
+
+// STC PLUGIN
+.stc-drawer-plugin-element {
+  .stc-drawer-plugin {
+    margin: 0;
+  }
+  rect {
+    fill: $mainColor !important;
+  }
+}

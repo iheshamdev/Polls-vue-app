@@ -1,0 +1,36 @@
+<template>
+  <div>
+    <nuxt />
+  </div>
+</template>
+
+<style lang="scss">
+html {
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  word-spacing: 1px;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+:root {
+  --mainColor: #ffc600;
+}
+$mainColor: #45176b;
+$watermelonColor: #ff5780;
+$darkGrayColor: #868e96;
+$lightGrayColor: #eff3f3;
+$grayBorderColor: #ccc;
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  outline: 0;
+}
+</style>
