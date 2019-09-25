@@ -1,14 +1,9 @@
 <template>
   <div class="container">
-    <!-- My header -->
     <CustomHeader />
-    <!-- First paint -->
     <FirstPaint />
-    <!-- features cards -->
     <FeaturesCards />
-    <!-- vote example -->
     <VoteExample />
-    <!-- footer -->
     <HomeFooter />
   </div>
 </template>

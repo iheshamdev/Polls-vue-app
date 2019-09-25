@@ -1,18 +1,11 @@
 <template>
   <header>
-    <a href="./index.html" class="logo">
-      <img src="@/assets/images/logo.svg" alt="Polls logo" />
-    </a>
+    <nuxt-link to="/" class="logo">
+      <img src="~assets/images/logo.svg" alt="Polls logo" />
+    </nuxt-link>
     <div class="stc-drawer-plugin-element"></div>
   </header>
 </template>
-
-
-<script
-    data-stc-drawer-language="ar"
-    data-stc-drawer-opening-direction="right"
-    src="https://stc-drawer-plugin-cdn.netlify.com/dist/stc-drawer-plugin.min.js">
-</script>
 
 <script>
 export default {

@@ -39,3 +39,23 @@ ul {
     fill: $mainColor !important;
   }
 }
+
+.primary-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  .primary-btn {
+    background-color: $mainColor;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    height: 54px;
+    border-radius: 40px;
+    font-size: 20px;
+    font-weight: 500;
+    margin-left: 32px;
+    .icon {
+      margin-right: 12px;
+    }
+  }
+}
