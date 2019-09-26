@@ -3,7 +3,6 @@
     <CustomHeader />
     <section class="subscribe-to-push-notifications">
       <img src="~assets/images/vote-published-illustration.svg" alt="Your vote is done" />
-
       <h2>تم انشاء التصويت بنجاح</h2>
       <p>ادخل بريدك الالكترونى للحصول على النتائج</p>
 
@@ -245,7 +244,7 @@
 
 
 <script>
-import CustomHeader from "../../components/shared/Header";
+import CustomHeader from "../../../components/shared/Header";
 
 export default {
   components: {

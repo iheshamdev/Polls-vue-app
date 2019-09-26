@@ -22,11 +22,6 @@ export default {
     FeaturesCards,
     VoteExample,
     HomeFooter
-  },
-  data() {
-    return {
-      name: "Hesham"
-    };
   }
 };
 </script>

@@ -2,20 +2,11 @@
   <section class="home-page_vote-example-list">
     <div class="hint">مثال على تصويت</div>
 
-    <h4>ما هى الدولة المتجهة لرؤية 2030</h4>
+    <h4>{{randomData.description}}</h4>
 
     <ul class="list-of-countries">
-      <li>
-        <span>الولايات المتحدة الامريكية US</span>
-      </li>
-      <li>
-        <span>المملكة العربية السعودية SA</span>
-      </li>
-      <li>
-        <span>المملكة المتحدة GB</span>
-      </li>
-      <li>
-        <span>المانيا DB</span>
+      <li v-for="option in randomData.options" :key="option._id">
+        <span>{{option.title}}</span>
       </li>
     </ul>
 
@@ -48,7 +39,11 @@
             </g>
           </svg>
         </span>
-        <span class="days">6 ايام و 23 ساعة متبقية</span>
+        <!-- <span class="days">6 ايام و 23 ساعة متبقية</span> -->
+        <span class="endsAt">
+          <span v-if="date" class="date">{{date}} ايام و</span>
+          <span v-if="hours" class="hours">{{hours}} ساعة متبقية</span>
+        </span>
       </div>
 
       <div>
@@ -88,25 +83,35 @@
             </g>
           </svg>
         </span>
-        <span>1,900 تصويت</span>
+        <span>{{pollVotes}} تصويت</span>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-export default {};
+import { GET } from "../../common/HTTPModule";
+export default {
+  data() {
+    return {
+      randomData: {},
+      date: null,
+      hours: null,
+      pollVotes: 0
+    };
+  },
+  async created() {
+    const { data } = await GET("https://poll.house/api/polls/random");
+    this.randomData = data;
+    this.randomData.options.forEach(option => (this.pollVotes += option.votes));
+    this.date = new Date(data.endsAt).getDate() - new Date().getDate();
+    this.hours = new Date(data.endsAt).getHours() - new Date().getHours();
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-.home-page_vote-example-list,
-.home-page_votes-example-grid {
-  &.home-page_votes-example-grid {
-    .hint {
-      left: auto;
-      right: 28px;
-    }
-  }
+.home-page_vote-example-list {
   background-color: $lightGrayColor;
   position: relative;
   padding: 60px 16px 48px;
@@ -175,6 +180,9 @@ export default {};
         display: flex;
         align-items: center;
         height: 100%;
+        &.date {
+          margin-left: 6px;
+        }
         svg {
           margin-left: 8px;
         }

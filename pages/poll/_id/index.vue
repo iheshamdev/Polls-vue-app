@@ -150,7 +150,7 @@
 </template>
 
 <script>
-import CustomHeader from "../../components/shared/Header";
+import CustomHeader from "../../../components/shared/Header";
 export default {
   components: {
     CustomHeader
