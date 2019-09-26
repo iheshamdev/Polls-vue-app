@@ -54,6 +54,9 @@ ul {
     font-size: 20px;
     font-weight: 500;
     margin-left: 32px;
+    &:disabled {
+      opacity: 0.5;
+    }
     .icon {
       margin-right: 12px;
     }

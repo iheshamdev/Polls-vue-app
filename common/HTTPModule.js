@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 
 const HTTP_REQUEST = async (
   method,
@@ -8,23 +8,28 @@ const HTTP_REQUEST = async (
   contentType = 'multipart/form-data'
 ) => {
 
+  const toFormData = (obj) => {
+    const formData = new FormData()
+    Object.keys(obj).forEach(key => formData.append(key, obj[key]))
+    return formData
+  }
+
   const request = await axios({
     method,
     url: URL,
-    data: postData,
+    data: toFormData(postData),
     headers: {
       'Content-Type': contentType,
     }
-  })
-    .then(function (response) {
+  }).then(function (response) {
       return response
-    })
-    .catch((err) => {
+    }).catch((err) => {
       console.warn(err)
       return err.response
     })
   return request
 }
+
 
 export const POST = (URL, postData, auth) => {
   return HTTP_REQUEST('post', URL, postData, auth)

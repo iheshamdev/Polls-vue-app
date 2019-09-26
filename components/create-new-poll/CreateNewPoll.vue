@@ -1,9 +1,14 @@
 <template>
   <section class="post-your-vote">
-    <input type="text" placeholder="اكتب السؤال هنا..." />
+    <input
+      type="text"
+      placeholder="اكتب السؤال هنا..."
+      v-model="description"
+      @keyup="activateSubmitBtn($event)"
+    />
 
-    <ul id="choices">
-      <li class="listItem">
+    <ul id="choices" ref="choises">
+      <li class="option" v-for="(option, i) in options" :key="i">
         <div class="sortable-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14">
             <g transform="translate(1)">
@@ -41,8 +46,14 @@
           </svg>
         </div>
         <div class="content">
-          <input class="inp" type="text" placeholder="اكتب خيارك هنا" />
-          <div class="delete-icon hide" onClick="deleteChoise(event, 'onlyListItem')">
+          <input
+            class="inp"
+            type="text"
+            placeholder="اكتب خيارك هنا"
+            v-model="option.title"
+            @keyup="activateSubmitBtn($event)"
+          />
+          <div class="delete-icon" v-if="option.canDeleteIt" @click="deleteChoise(i)">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
               <g transform="translate(1 1)">
                 <circle
@@ -73,15 +84,15 @@
       </li>
     </ul>
 
-    <div id="add-choice">اضافة خيار</div>
+    <div id="add-choice" ref="addChoise" @click="addChoise()">اضافة خيار</div>
 
     <div class="expiry-date">
       <span>ينتهى التصويت خلال</span>
       <div class="select-box">
-        <select>
-          <option>1 يوم</option>
-          <option>3 ايام</option>
-          <option>5 ايام</option>
+        <select v-model="endsAt">
+          <option value="1">1 يوم</option>
+          <option value="3">3 ايام</option>
+          <option value="7">7 ايام</option>
         </select>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +116,7 @@
     </div>
 
     <div class="primary-btn-container">
-      <nuxt-link to="/subscribe-for-notifications" class="primary-btn">
+      <button class="primary-btn" @click="CreatePoll()" :disabled="!submitBtnIsActive">
         <span>نشر التصويت</span>
         <div class="icon arrow-left-icon">
           <svg
@@ -137,14 +148,58 @@
             </g>
           </svg>
         </div>
-      </nuxt-link>
+      </button>
     </div>
   </section>
 </template>
 
 <script>
+import { POST } from "../../common/HTTPModule";
+
 export default {
-  methods: {}
+  data() {
+    return {
+      description: "",
+      options: [
+        { title: "", canDeleteIt: false },
+        { title: "", canDeleteIt: false }
+      ],
+      endsAt: 1,
+      submitBtnIsActive: false
+    };
+  },
+  methods: {
+    addChoise() {
+      this.options.push({ title: "", canDeleteIt: true });
+    },
+    deleteChoise(i) {
+      this.options.splice(i, 1);
+    },
+    activateSubmitBtn() {
+      if (
+        this.description &&
+        this.description !== " " &&
+        (this.options[0].title && this.options[0].title !== " ") &&
+        (this.options[1].title && this.options[1].title !== " ")
+      ) {
+        this.submitBtnIsActive = true;
+      } else {
+        this.submitBtnIsActive = false;
+      }
+    },
+    async CreatePoll() {
+      const params = {
+        status: "active",
+        description: this.description,
+        options: JSON.stringify(this.options),
+        endsAt: parseInt(this.endsAt) * (1000 * 60 * 60 * 24) // Poll duration in milliseconds
+      };
+      const { data } = await POST("https://poll.house/api/polls", params);
+      if (data) {
+        this.$router.push(`/subscribe/${data._id}`);
+      }
+    }
+  }
 };
 </script>
 
