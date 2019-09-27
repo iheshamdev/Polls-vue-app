@@ -195,7 +195,9 @@ export default {
         endsAt: parseInt(this.endsAt) * (1000 * 60 * 60 * 24) // Poll duration in milliseconds
       };
       const { data } = await POST("https://poll.house/api/polls", params);
+      console.log(data);
       if (data) {
+        localStorage.setItem("token", data.token);
         this.$router.push(`/subscribe/${data._id}`);
       }
     }

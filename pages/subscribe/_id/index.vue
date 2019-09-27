@@ -30,11 +30,11 @@
             />
           </g>
         </svg>
-        <input type="text" />
+        <input type="text" v-model="email" @keyup="emailValidator()" />
       </div>
 
       <div class="primary-btn-container" v-if="!emailPublished">
-        <a class="primary-btn" @click="subscribe()">
+        <button class="primary-btn" :disabled="!isEmailValid" @click="subscribe()">
           <span>الاشتراك بالتنبيهات</span>
           <div class="icon arrow-left-icon">
             <svg
@@ -66,7 +66,7 @@
               </g>
             </svg>
           </div>
-        </a>
+        </button>
       </div>
 
       <div class="confirm-message" v-if="emailPublished">
@@ -130,8 +130,9 @@
           </svg>
           <span>نسخ الرابط</span>
         </div>
-        <div>
-          <nuxt-link to="/statistics">
+
+        <div @click="ShowStates()">
+          <div>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18">
               <g transform="translate(0 1)">
                 <path
@@ -167,7 +168,7 @@
               </g>
             </svg>
             <span>عرض الاحصائيات</span>
-          </nuxt-link>
+          </div>
         </div>
       </div>
 
@@ -245,6 +246,7 @@
 
 <script>
 import CustomHeader from "../../../components/shared/Header";
+import { POST } from "../../../common/HTTPModule";
 
 export default {
   components: {
@@ -252,13 +254,44 @@ export default {
   },
   data() {
     return {
-      emailPublished: false
+      emailPublished: false,
+      email: "",
+      _id: "",
+      token: "",
+      isEmailValid: false,
+      reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
     };
   },
+  created() {
+    this._id = this.$route.params.id;
+    this.token = localStorage.getItem("token");
+  },
   methods: {
-    subscribe() {
-      console.log("hi");
-      this.emailPublished = true;
+    async subscribe() {
+      const params = {
+        email: this.email
+      };
+      const { data } = await POST(
+        `https://poll.house/api/polls/${this._id}/subscribe?token=${this.token}`,
+        params
+      );
+      if (data) {
+        console.log(data);
+        this.emailPublished = true;
+      }
+      console.log("Subscribe");
+    },
+    emailValidator: function() {
+      if (this.reg.test(this.email)) {
+        this.isEmailValid = true;
+      } else {
+        this.isEmailValid = false;
+      }
+    },
+    ShowStates() {
+      if (this.emailPublished) {
+        this.$router.push(`/poll/${data._id}`);
+      }
     }
   }
 };
