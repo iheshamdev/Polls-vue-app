@@ -3,57 +3,38 @@
     <customHeader />
     <section class="statistics">
       <h1>احصائيات تصويتك</h1>
-      <p>ما هي الدولة المتجهة لرؤية 2030؟</p>
+      <p>{{pollTitle}}</p>
 
       <div class="doughnut-chart">
         <div class="votes-counter">
-          <div class="number">1,200</div>
+          <div class="number">{{totalVotes}}</div>
           <div>اجمالى التصويتات</div>
         </div>
-        <canvas id="myChart" width="230" height="230"></canvas>
+        <canvas id="myChart" ref="myChart" width="230" height="230"></canvas>
       </div>
 
-      <div class="statistics-info">
+      <p class="no-votes-message" v-if="totalVotes === 0">لا يوجد اى تصويتات حتى الان</p>
+
+      <div class="statistics-info" v-if="totalVotes > 0">
         <div class="labels">
           <span class="voters">المصوتون</span>
           <span class="the-choice">الإختيار</span>
         </div>
         <ul class="bars-chart">
-          <li>
-            <div class="bar" style="width: 80%; background-color: rgba(255, 231, 0, 0.2)"></div>
+          <li v-for="(countryObject, i) in statsByCountry" :key="i">
+            <div
+              class="bar"
+              v-bind:style="{width: `${countryObject.count * 100 / totalVoters}%`, backgroundColor: chartColors[i]}"
+            ></div>
             <div class="labels">
-              <span class="voters">600</span>
-              <span class="the-choice">المملكة العربية السعودية SA</span>
-            </div>
-          </li>
-
-          <li>
-            <div class="bar" style="width: 60%; background-color: rgba(130, 106, 249, 0.2)"></div>
-            <div class="labels">
-              <span class="voters">400</span>
-              <span class="the-choice">المملكة العربية السعودية SA</span>
-            </div>
-          </li>
-
-          <li>
-            <div class="bar" style="width: 28%; background-color: rgba(44, 217, 197, 0.2)"></div>
-            <div class="labels">
-              <span class="voters">156</span>
-              <span class="the-choice">المملكة العربية السعودية SA</span>
-            </div>
-          </li>
-
-          <li>
-            <div class="bar" style="width: 12%; background-color: rgba(45, 153, 255, 0.2)"></div>
-            <div class="labels">
-              <span class="voters">32</span>
-              <span class="the-choice">المملكة العربية السعودية SA</span>
+              <span class="voters">{{countryObject.count}}</span>
+              <span class="the-choice">{{countryObject.country}}</span>
             </div>
           </li>
         </ul>
       </div>
 
-      <div class="share-statistics">
+      <div class="share-statistics" v-if="totalVotes > 0">
         <span>شاركها مع اصدقاءك</span>
         <ul class="social-media-links">
           <li>
@@ -151,17 +132,107 @@
 
 <script>
 import CustomHeader from "../../../components/shared/Header";
+import { GET } from "../../../common/HTTPModule";
+
 export default {
   components: {
     CustomHeader
   },
-  mounted() {
-    const drawer = document.createElement("script");
-    drawer.setAttribute(
-      "src",
-      "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+  head() {
+    return {
+      script: [
+        {
+          src:
+            "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+        }
+      ]
+    };
+  },
+  data() {
+    return {
+      _id: null,
+      token: null,
+      myChart: null,
+      totalVotes: 0,
+      pollTitle: "",
+      totalVoters: 0,
+      chartColors: [
+        "#FFE700",
+        "#2CD9C5",
+        "#826AF9",
+        "#2D99FF",
+        "#263B80",
+        "#139AD6",
+        "#e74c3c",
+        "#392d9b",
+        "#F752A7",
+        "#073F54"
+      ],
+      statsByCountry: []
+    };
+  },
+  async created() {
+    this._id = this.$route.params.id;
+    this.token = localStorage.getItem("token");
+    const { data } = await GET(
+      `https://poll.house/api/polls/${this._id}/stats?token=${this.token}`
     );
-    document.head.appendChild(drawer);
+    this.pollTitle = data.poll.description; // update poll title
+    this.statsByCountry.forEach(item => (this.totalVoters += item.count)); // calc all voters
+    this.setDoughnutChartData(data);
+  },
+  methods: {
+    setDoughnutChartData(pollStateData) {
+      let votes = [];
+      let labels = [];
+      pollStateData.poll.options.forEach(option => {
+        votes.push(option.votes); // update votes
+        labels.push(option.title); // update labels
+        this.totalVotes += option.votes; // calc votes
+      });
+      // If there's no votes till now
+      if (this.totalVotes === 0) {
+        // insert any number you want except 0
+        votes = [1];
+        // insert gray color at the beginning of chartColors array
+        this.chartColors.unshift("#f3f3f3");
+      }
+      const ctx = this.$refs["myChart"];
+      this.myChart = new window.Chart(ctx, {
+        type: "doughnut",
+        data: {
+          datasets: [
+            {
+              data: votes,
+              backgroundColor: this.chartColors
+            }
+          ],
+          labels: labels
+        },
+        options: {
+          legend: {
+            display: false
+          },
+          layout: {
+            padding: {
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0
+            }
+          },
+          cutoutPercentage: 70,
+          elements: {
+            arc: {
+              borderWidth: 0
+            }
+          },
+          tooltips: {
+            enabled: false
+          }
+        }
+      });
+    }
   }
 };
 </script>
@@ -177,7 +248,7 @@ export default {
     font-weight: bold;
     font-size: 32px;
   }
-  p {
+  > p {
     margin-top: 20px;
     text-align: center;
     font-size: 24px;
@@ -200,6 +271,11 @@ export default {
         font-size: 20px;
       }
     }
+  }
+  .no-votes-message {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 40px 0 80px;
   }
   .statistics-info {
     padding: 0 16px;
@@ -236,6 +312,7 @@ export default {
           height: 100%;
           border-radius: 8px;
           z-index: 1;
+          opacity: 0.2;
           transform: scaleX(0);
           transform-origin: right center;
           animation: fillBar 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;

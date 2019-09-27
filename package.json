@@ -13,6 +13,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/style-resources": "^1.0.0",
+    "chart.js": "^2.8.0",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {
