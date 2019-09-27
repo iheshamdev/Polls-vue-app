@@ -102,11 +102,14 @@ export default {
   },
   async created() {
     const { data } = await GET("https://poll.house/api/polls/random");
-    console.log(data);
     this.randomData = data;
     this.randomData.options.forEach(option => (this.pollVotes += option.votes));
     this.date = new Date(data.endsAt).getDate() - new Date().getDate();
     this.hours = new Date(data.endsAt).getHours() - new Date().getHours();
+    if (this.hours < 0) {
+      this.date--;
+      this.hours += 24;
+    }
   }
 };
 </script>
