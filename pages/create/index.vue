@@ -1,5 +1,5 @@
 <template>
-  <div class="contaciner">
+  <div class="container">
     <CreateNewPoll />
   </div>
 </template>

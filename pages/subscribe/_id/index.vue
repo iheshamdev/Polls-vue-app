@@ -100,7 +100,7 @@
     </div>
 
     <div class="options">
-      <div>
+      <div @click="copyPollURL()">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
           <g transform="translate(1 1)">
             <rect
@@ -237,6 +237,15 @@
         </li>
       </ul>
     </div>
+
+    <div
+      class="showCopyLinkConfirmMessage"
+      ref="copyLinkConfirmMessage"
+      v-bind:class="{'show': showCopyLinkConfirmMessage, 'hide': !showCopyLinkConfirmMessage}"
+    >
+      <div>تم نسخ الرابط بنجاح ✔</div>
+      <input type="text" ref="pollUrlInput" :value="pollUrl" />
+    </div>
   </section>
 </template>
 
@@ -252,11 +261,14 @@ export default {
       _id: "",
       token: "",
       isEmailValid: false,
+      pollUrl: "",
+      showCopyLinkConfirmMessage: false,
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/
     };
   },
-  created() {
+  mounted() {
     this._id = this.$route.params.id;
+    this.pollUrl = window.location.origin + "/poll/" + this._id;
     this.token = localStorage.getItem("token");
   },
   methods: {
@@ -282,9 +294,15 @@ export default {
       }
     },
     ShowStates() {
-      if (this.emailPublished) {
-        this.$router.push(`/poll/${this._id}`);
-      }
+      this.$router.push(`/stats/${this._id}`);
+    },
+    copyPollURL() {
+      this.$refs["pollUrlInput"].select();
+      document.execCommand("copy");
+      this.showCopyLinkConfirmMessage = true;
+      setTimeout(() => {
+        this.showCopyLinkConfirmMessage = false;
+      }, 2000);
     }
   }
 };
@@ -379,6 +397,49 @@ export default {
         margin: 0 12px;
       }
     }
+  }
+  .showCopyLinkConfirmMessage {
+    position: fixed;
+    bottom: 30px;
+    left: 5%;
+    /* transform: translateX(-50%); */
+    width: 90%;
+    border-radius: 8px;
+    background-color: #45176b;
+    color: #fff;
+    padding: 10px 15px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    transform: translateY(200px);
+    &.show {
+      animation: showCopyLinkConfirmMessage 0.7s cubic-bezier(0.23, 1, 0.32, 1)
+        forwards;
+    }
+    &.hide {
+      animation: hideCopyLinkConfirmMessage 0.7s cubic-bezier(0.23, 1, 0.32, 1)
+        forwards;
+    }
+    input {
+      text-align: center;
+      background-color: transparent;
+      color: #fff;
+      width: 100%;
+      font-size: 15px;
+      margin-top: 8px;
+      &::selection {
+        background-color: transparent;
+      }
+    }
+  }
+}
+@keyframes showCopyLinkConfirmMessage {
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes hideCopyLinkConfirmMessage {
+  to {
+    transform: translateY(200px);
   }
 }
 </style>

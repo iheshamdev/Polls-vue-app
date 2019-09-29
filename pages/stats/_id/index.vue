@@ -170,9 +170,13 @@ export default {
     const { data } = await GET(
       `https://poll.house/api/polls/${this._id}/stats?token=${this.token}`
     );
-    this.pollTitle = data.poll.description; // update poll title
-    this.statsByCountry.forEach(item => (this.totalVoters += item.count)); // calc all voters
-    this.setDoughnutChartData(data);
+    if (data.statusCode === 401) {
+      this.$router.push(`/`);
+    } else {
+      this.pollTitle = data.poll.description; // update poll title
+      this.statsByCountry.forEach(item => (this.totalVoters += item.count)); // calc all voters
+      this.setDoughnutChartData(data);
+    }
   },
   methods: {
     setDoughnutChartData(pollStateData) {
