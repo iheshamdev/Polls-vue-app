@@ -29,6 +29,9 @@ a {
 ul {
   list-style-type: none;
 }
+input::placeholder {
+  font-weight: 500;
+}
 
 // STC PLUGIN
 .stc-drawer-plugin-element {

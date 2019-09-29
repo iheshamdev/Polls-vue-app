@@ -41,8 +41,8 @@
         </span>
         <!-- <span class="days">6 ايام و 23 ساعة متبقية</span> -->
         <span class="endsAt">
-          <span v-if="date" class="date">{{date}} ايام و</span>
-          <span v-if="hours" class="hours">{{hours}} ساعة متبقية</span>
+          <span v-if="days" class="days">{{days}} ايام</span>
+          <span v-if="hours" class="hours">و {{hours}} ساعة متبقية</span>
         </span>
       </div>
 
@@ -95,7 +95,7 @@ export default {
   data() {
     return {
       randomData: {},
-      date: null,
+      days: null,
       hours: null,
       pollVotes: 0
     };
@@ -104,12 +104,11 @@ export default {
     const { data } = await GET("https://poll.house/api/polls/random");
     this.randomData = data;
     this.randomData.options.forEach(option => (this.pollVotes += option.votes));
-    this.date = new Date(data.endsAt).getDate() - new Date().getDate();
-    this.hours = new Date(data.endsAt).getHours() - new Date().getHours();
-    if (this.hours < 0) {
-      this.date--;
-      this.hours += 24;
-    }
+    console.log(data);
+    const DateDiff = require("date-diff");
+    const diff = new DateDiff(new Date(data.endsAt), new Date());
+    this.days = Math.floor(diff.days());
+    this.hours = Math.floor(diff.hours() % 24);
   }
 };
 </script>
@@ -184,7 +183,7 @@ export default {
         display: flex;
         align-items: center;
         height: 100%;
-        &.date {
+        &.days {
           margin-left: 6px;
         }
         svg {

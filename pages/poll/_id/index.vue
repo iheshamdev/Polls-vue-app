@@ -1,162 +1,115 @@
 <template>
-  <div class="container">
-    <customHeader />
-    <section class="statistics">
-      <h1>احصائيات تصويتك</h1>
-      <p>{{pollTitle}}</p>
+  <section class="vote-page" v-if="pollData">
+    <h4>{{pollData.description}}</h4>
 
-      <div class="doughnut-chart">
-        <div class="votes-counter">
-          <div class="number">{{totalVotes}}</div>
-          <div>اجمالى التصويتات</div>
-        </div>
-        <canvas id="myChart" ref="myChart" width="230" height="230"></canvas>
+    <ul class="vote-options" v-if="!showVoteStats">
+      <li v-for="option in pollData.options" :key="option._id">
+        <span @click="SubmitNewVote(option._id)">{{option.title}}</span>
+      </li>
+    </ul>
+
+    <ul class="vote-stats" v-if="showVoteStats">
+      <li v-for="(option, i) in pollData.options" :key="option._id">
+        <div
+          class="stats-bar"
+          v-bind:style="{width: `${option.votes * 100 / totalVotes}%`, backgroundColor: statsColors[i]}"
+        ></div>
+        <span>{{option.title}}</span>
+        <span>{{Math.round(option.votes * 100 / totalVotes)}}%</span>
+      </li>
+    </ul>
+
+    <div class="vote-details">
+      <div>
+        <span class="icon clock-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+            <g transform="translate(1 1)">
+              <circle
+                cx="8"
+                cy="8"
+                r="8"
+                fill="none"
+                stroke="#868e96"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                stroke-width="2"
+              />
+              <path
+                d="M0,0V4.8L3.2,6.4"
+                transform="translate(8 3.2)"
+                fill="none"
+                stroke="#868e96"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                stroke-width="2"
+              />
+            </g>
+          </svg>
+        </span>
+        <!-- <span class="days">6 ايام و 23 ساعة متبقية</span> -->
+        <span class="endsAt">
+          <span v-if="days" class="days">{{days}} ايام</span>
+          <span v-if="hours" class="hours">و {{hours}} ساعة متبقية</span>
+        </span>
       </div>
 
-      <p class="no-votes-message" v-if="totalVotes === 0">لا يوجد اى تصويتات حتى الان</p>
-
-      <div class="statistics-info" v-if="totalVotes > 0">
-        <div class="labels">
-          <span class="voters">المصوتون</span>
-          <span class="the-choice">الإختيار</span>
-        </div>
-        <ul class="bars-chart">
-          <li v-for="(countryObject, i) in statsByCountry" :key="i">
-            <div
-              class="bar"
-              v-bind:style="{width: `${countryObject.count * 100 / totalVoters}%`, backgroundColor: chartColors[i]}"
-            ></div>
-            <div class="labels">
-              <span class="voters">{{countryObject.count}}</span>
-              <span class="the-choice">{{countryObject.country}}</span>
-            </div>
-          </li>
-        </ul>
+      <div>
+        <span class="icon chart-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18">
+            <g transform="translate(0 1)">
+              <path
+                d="M.5,10V0"
+                transform="translate(12.5 6)"
+                fill="none"
+                stroke="#868e96"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                stroke-width="2"
+              />
+              <path
+                d="M.5,16V0"
+                transform="translate(6.5)"
+                fill="none"
+                stroke="#868e96"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                stroke-width="2"
+              />
+              <path
+                d="M.5,6V0"
+                transform="translate(0.5 10)"
+                fill="none"
+                stroke="#868e96"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                stroke-width="2"
+              />
+            </g>
+          </svg>
+        </span>
+        <span>{{totalVotes}} تصويت</span>
       </div>
-
-      <div class="share-statistics" v-if="totalVotes > 0">
-        <span>شاركها مع اصدقاءك</span>
-        <ul class="social-media-links">
-          <li>
-            <a href="#">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="35.872"
-                height="36"
-                viewBox="0 0 35.872 36"
-              >
-                <g transform="translate(0)">
-                  <ellipse
-                    cx="17.936"
-                    cy="18"
-                    rx="17.936"
-                    ry="18"
-                    transform="translate(0 0)"
-                    fill="#1da1f2"
-                  />
-                  <g transform="translate(8.221 9.75)">
-                    <path
-                      d="M19.432,1.876a7.936,7.936,0,0,1-2.29.63A4,4,0,0,0,18.894.292a7.976,7.976,0,0,1-2.532.971A3.985,3.985,0,0,0,9.467,4a4.059,4.059,0,0,0,.1.911A11.3,11.3,0,0,1,1.353.731,4.017,4.017,0,0,0,2.587,6.073a3.968,3.968,0,0,1-1.806-.5v.05a4,4,0,0,0,3.2,3.923,3.975,3.975,0,0,1-1.051.14,4.045,4.045,0,0,1-.75-.071A3.993,3.993,0,0,0,5.9,12.393,7.978,7.978,0,0,1,.951,14.106,7.982,7.982,0,0,1,0,14.05a11.257,11.257,0,0,0,6.111,1.8A11.286,11.286,0,0,0,17.453,4.464q0-.26-.011-.518A8.128,8.128,0,0,0,19.432,1.876Z"
-                      transform="translate(0.747 0.327)"
-                      fill="#eff3f3"
-                    />
-                  </g>
-                </g>
-              </svg>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="35.872"
-                height="36"
-                viewBox="0 0 35.872 36"
-              >
-                <g transform="translate(0)">
-                  <path
-                    d="M.159,36v0l2.4-8.773a18,18,0,0,1,2.7-21.954A17.936,17.936,0,0,1,35.872,18,17.909,17.909,0,0,1,9.091,33.647L.16,36ZM11.982,9.6H11.8a1.626,1.626,0,0,0-1.189.556l-.1.1a4.942,4.942,0,0,0-1.454,3.616,8.514,8.514,0,0,0,1.81,4.605c.017.022.047.068.093.136a17.231,17.231,0,0,0,7.5,6.6A12.331,12.331,0,0,0,22.881,26.4a5.369,5.369,0,0,0,.68-.049c.08-.01.157-.019.235-.026a4.51,4.51,0,0,0,3-2.116,3.692,3.692,0,0,0,.254-2.12,1.458,1.458,0,0,0-.607-.4l-.243-.119c-.42-.212-2.629-1.3-3.038-1.451a1.476,1.476,0,0,0-.475-.115.6.6,0,0,0-.517.338c-.29.434-1.132,1.436-1.41,1.743a.6.6,0,0,1-.474.256,1.107,1.107,0,0,1-.486-.145c-.073-.036-.17-.079-.294-.132a11.461,11.461,0,0,1-3.279-2.079,13.359,13.359,0,0,1-2.47-3.085c-.262-.453-.019-.7.2-.914a6.427,6.427,0,0,0,.437-.5c.077-.093.156-.189.232-.276a2.876,2.876,0,0,0,.39-.65l.047-.1a.81.81,0,0,0-.035-.779c-.045-.091-.214-.511-.429-1.041-.314-.778-.706-1.747-.94-2.266-.34-.756-.706-.764-1-.77C12.438,9.6,12.2,9.6,11.982,9.6Z"
-                    fill="#21ba45"
-                  />
-                </g>
-              </svg>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="35.872"
-                height="35.815"
-                viewBox="0 0 35.872 35.815"
-              >
-                <g transform="translate(0)">
-                  <path
-                    d="M17.936,0a17.994,17.994,0,0,0-2.681,35.778V22.77H10.817V18.039h4.438V14.891c0-5.212,2.53-7.5,6.847-7.5a25.09,25.09,0,0,1,3.678.223v4.129H22.836c-1.832,0-2.472,1.745-2.472,3.71v2.586h5.37l-.728,4.731H20.364V35.815A17.994,17.994,0,0,0,17.936,0Z"
-                    fill="#3b5998"
-                  />
-                </g>
-              </svg>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="35.872"
-                height="36"
-                viewBox="0 0 35.872 36"
-              >
-                <ellipse
-                  cx="17.936"
-                  cy="18"
-                  rx="17.936"
-                  ry="18"
-                  transform="translate(0 0)"
-                  fill="#868e96"
-                />
-                <g transform="translate(8.221 8.25)">
-                  <path
-                    d="M14.947,0a4.448,4.448,0,0,0-3.17,1.318l-1.495,1.5A4.5,4.5,0,0,0,9.8,8.6L8.574,9.835a4.462,4.462,0,0,0-5.766.483l-1.495,1.5a4.492,4.492,0,1,0,6.341,6.363l1.495-1.5A4.479,4.479,0,0,0,10.463,13.5a4.554,4.554,0,0,0-.165-1.2L8.953,13.645a2.985,2.985,0,0,1-.861,1.976L6.6,17.121A2.994,2.994,0,0,1,2.37,12.879l1.495-1.5a2.962,2.962,0,0,1,3.624-.456L5.45,12.97A.749.749,0,1,0,6.507,14.03l7.473-7.5A.749.749,0,1,0,12.924,5.47L10.885,7.516a3,3,0,0,1,.454-3.637l1.495-1.5a2.988,2.988,0,0,1,4.227,0,3.01,3.01,0,0,1,0,4.242l-1.495,1.5a2.962,2.962,0,0,1-1.969.864l-1.344,1.349a4.508,4.508,0,0,0,1.2.166,4.448,4.448,0,0,0,3.17-1.318l1.495-1.5a4.51,4.51,0,0,0,0-6.363A4.448,4.448,0,0,0,14.947,0Z"
-                    fill="#eff3f3"
-                  />
-                </g>
-              </svg>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </template>
 
 <script>
-import CustomHeader from "../../../components/shared/Header";
-import { GET } from "../../../common/HTTPModule";
-
+import { POST, GET } from "../../../common/HTTPModule";
 export default {
-  components: {
-    CustomHeader
-  },
-  head() {
-    return {
-      script: [
-        {
-          src:
-            "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
-        }
-      ]
-    };
-  },
   data() {
     return {
       _id: null,
-      token: null,
-      myChart: null,
+      showVoteStats: false,
+      pollData: null,
+      days: null,
+      hours: null,
       totalVotes: 0,
-      pollTitle: "",
-      totalVoters: 0,
-      chartColors: [
+      statsColors: [
         "#FFE700",
         "#2CD9C5",
         "#826AF9",
@@ -167,178 +120,154 @@ export default {
         "#392d9b",
         "#F752A7",
         "#073F54"
-      ],
-      statsByCountry: []
+      ]
     };
   },
   async created() {
     this._id = this.$route.params.id;
-    this.token = localStorage.getItem("token");
-    const { data } = await GET(
-      `https://poll.house/api/polls/${this._id}/stats?token=${this.token}`
-    );
-    this.pollTitle = data.poll.description; // update poll title
-    this.statsByCountry.forEach(item => (this.totalVoters += item.count)); // calc all voters
-    this.setDoughnutChartData(data);
+    const pollsVotedList = JSON.parse(localStorage.getItem("pollsVotedList"));
+    if (
+      pollsVotedList &&
+      pollsVotedList.length > 0 &&
+      pollsVotedList.includes(this._id)
+    ) {
+      this.showVoteStats = true;
+    }
+    const { data } = await GET(`https://poll.house/api/polls/${this._id}`);
+    if (data.statusCode == 404) {
+      this.$router.push(`/`);
+    } else {
+      if (data) this.pollData = data;
+      this.totalVotes = data.votes;
+      const DateDiff = require("date-diff");
+      const diff = new DateDiff(new Date(data.endsAt), new Date());
+      this.days = Math.floor(diff.days());
+      this.hours = Math.floor(diff.hours()) % 24;
+    }
   },
   methods: {
-    setDoughnutChartData(pollStateData) {
-      let votes = [];
-      let labels = [];
-      pollStateData.poll.options.forEach(option => {
-        votes.push(option.votes); // update votes
-        labels.push(option.title); // update labels
-        this.totalVotes += option.votes; // calc votes
-      });
-      // If there's no votes till now
-      if (this.totalVotes === 0) {
-        // insert any number you want except 0
-        votes = [1];
-        // insert gray color at the beginning of chartColors array
-        this.chartColors.unshift("#f3f3f3");
-      }
-      const ctx = this.$refs["myChart"];
-      this.myChart = new window.Chart(ctx, {
-        type: "doughnut",
-        data: {
-          datasets: [
-            {
-              data: votes,
-              backgroundColor: this.chartColors
-            }
-          ],
-          labels: labels
-        },
-        options: {
-          legend: {
-            display: false
-          },
-          layout: {
-            padding: {
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0
-            }
-          },
-          cutoutPercentage: 70,
-          elements: {
-            arc: {
-              borderWidth: 0
-            }
-          },
-          tooltips: {
-            enabled: false
-          }
+    async SubmitNewVote(optionId) {
+      const params = { _id: optionId };
+      const { data } = await POST(
+        `https://poll.house/api/polls/${this._id}/vote`,
+        params
+      );
+      console.log(data);
+      if (data) {
+        this.totalVotes = data.votes;
+        this.pollData = data;
+        this.showVoteStats = true;
+        // We use localStorage to prevent the user submitting the vote twice
+        if (
+          !JSON.parse(localStorage.getItem("pollsVotedList")) ||
+          JSON.parse(localStorage.getItem("pollsVotedList")).length === 0
+        ) {
+          localStorage.setItem("pollsVotedList", JSON.stringify([this._id]));
+        } else {
+          let prevList = JSON.parse(localStorage.getItem("pollsVotedList"));
+          localStorage.setItem(
+            "pollsVotedList",
+            JSON.stringify([...prevList, this._id])
+          );
         }
-      });
+      }
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.statistics {
-  background-color: #fff;
-  padding: 32px 0 60px;
-  border-top: 1px solid $grayBorderColor;
-  h1 {
+.vote-page {
+  background-color: $lightGrayColor;
+  position: relative;
+  padding: 38px 16px 48px;
+  h4 {
+    color: $darkGrayColor;
     text-align: center;
-    color: $mainColor;
-    font-weight: bold;
-    font-size: 32px;
+    font-size: 21px;
+    margin-bottom: 24px;
   }
-  > p {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-  }
-  .doughnut-chart {
-    display: flex;
-    margin: 30px auto;
-    width: 230px;
-    height: 230px;
-    position: relative;
-    .votes-counter {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 14px;
-      text-align: center;
-      .number {
-        font-size: 20px;
-      }
-    }
-  }
-  .no-votes-message {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 40px 0 80px;
-  }
-  .statistics-info {
-    padding: 0 16px;
-    .labels {
-      display: flex;
-      align-items: center;
-      height: 100%;
+  // vote options
+  .vote-options {
+    counter-reset: countries;
+    li {
       position: relative;
-      color: #505d6f;
-      z-index: 2;
-      .voters {
-        width: 100px;
-        text-align: left;
-        margin-left: 24px;
-      }
-      .the-choice {
-        flex: 1;
-      }
-    }
-    ul {
-      margin-top: 8px;
-      li {
+      margin: 0 0 24px;
+      padding-right: 32px;
+      color: $darkGrayColor;
+      span {
+        width: 100%;
+        display: block;
+        height: 64px;
+        border-radius: 40px;
+        background-color: #fff;
+        border: 1px solid $grayBorderColor;
         display: flex;
         align-items: center;
+        padding: 0 30px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      &::before {
+        counter-increment: countries;
+        content: counter(countries) ".";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0;
+      }
+    }
+  }
+  // Vote stats
+  .vote-stats {
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 12px;
+      height: 50px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      position: relative;
+      span {
         position: relative;
-        height: 40px;
-        background-color: #eff3f3;
+        z-index: 2;
+        color: #000;
+      }
+      .stats-bar {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
         border-radius: 8px;
-        margin-bottom: 8px;
-        .bar {
-          position: absolute;
-          top: 0;
-          right: 0;
-          height: 100%;
-          border-radius: 8px;
-          z-index: 1;
-          opacity: 0.2;
-          transform: scaleX(0);
-          transform-origin: right center;
-          animation: fillBar 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        opacity: 0.2;
+      }
+    }
+  }
+  // Vote details
+  .vote-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: $darkGrayColor;
+    padding-top: 12px;
+    div {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      span {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        &.days {
+          margin-left: 6px;
+        }
+        svg {
+          margin-left: 8px;
         }
       }
     }
-  }
-  .share-statistics {
-    margin-top: 50px;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 24px;
-    ul {
-      display: flex;
-      align-items: center;
-      margin-right: 15px;
-      li {
-        margin: 0 12px;
-      }
-    }
-  }
-}
-
-@keyframes fillBar {
-  to {
-    transform: scaleX(1);
   }
 }
 </style>
