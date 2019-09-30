@@ -166,14 +166,18 @@ export default {
   },
   async created() {
     this._id = this.$route.params.id;
-    this.token = localStorage.getItem("token");
+    if (process.browser) {
+      this.token = localStorage.getItem("token");
+    }
     const { data } = await GET(
       `https://poll.house/api/polls/${this._id}/stats?token=${this.token}`
     );
+    console.log(data);
     if (data.statusCode === 401) {
       this.$router.push(`/`);
     } else {
       this.pollTitle = data.poll.description; // update poll title
+      this.statsByCountry = data.statsByCountry;
       this.statsByCountry.forEach(item => (this.totalVoters += item.count)); // calc all voters
       this.setDoughnutChartData(data);
     }
