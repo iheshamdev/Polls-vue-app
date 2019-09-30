@@ -161,6 +161,7 @@
 
 <script>
 import { POST } from "../../common/HTTPModule";
+import Sortable from "sortablejs";
 
 export default {
   data() {
@@ -174,6 +175,12 @@ export default {
       submitBtnIsActive: false,
       loading: false
     };
+  },
+  mounted() {
+    const choicesList = this.$refs["choises"];
+    Sortable.create(choicesList, {
+      handle: ".sortable-icon"
+    });
   },
   methods: {
     addChoise() {
@@ -203,7 +210,6 @@ export default {
         endsAt: parseInt(this.endsAt) * (1000 * 60 * 60 * 24) // Poll duration in milliseconds
       };
       const { data } = await POST("https://poll.house/api/polls", params);
-      console.log(data);
       if (data) {
         localStorage.setItem("token", data.token);
         this.$router.push(`/subscribe/${data._id}`);

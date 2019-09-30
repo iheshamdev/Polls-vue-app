@@ -125,24 +125,26 @@ export default {
   },
   async created() {
     this._id = this.$route.params.id;
-    const pollsVotedList = JSON.parse(localStorage.getItem("pollsVotedList"));
-    if (
-      pollsVotedList &&
-      pollsVotedList.length > 0 &&
-      pollsVotedList.includes(this._id)
-    ) {
-      this.showVoteStats = true;
-    }
-    const { data } = await GET(`https://poll.house/api/polls/${this._id}`);
-    if (data.statusCode == 404) {
-      this.$router.push(`/`);
-    } else {
-      if (data) this.pollData = data;
-      this.totalVotes = data.votes;
-      const DateDiff = require("date-diff");
-      const diff = new DateDiff(new Date(data.endsAt), new Date());
-      this.days = Math.floor(diff.days());
-      this.hours = Math.floor(diff.hours()) % 24;
+    if (process.browser) {
+      const pollsVotedList = JSON.parse(localStorage.getItem("pollsVotedList"));
+      if (
+        pollsVotedList &&
+        pollsVotedList.length > 0 &&
+        pollsVotedList.includes(this._id)
+      ) {
+        this.showVoteStats = true;
+      }
+      const { data } = await GET(`https://poll.house/api/polls/${this._id}`);
+      if (data.statusCode == 404) {
+        this.$router.push(`/`);
+      } else {
+        if (data) this.pollData = data;
+        this.totalVotes = data.votes;
+        const DateDiff = require("date-diff");
+        const diff = new DateDiff(new Date(data.endsAt), new Date());
+        this.days = Math.floor(diff.days());
+        this.hours = Math.floor(diff.hours()) % 24;
+      }
     }
   },
   methods: {
@@ -158,17 +160,19 @@ export default {
         this.pollData = data;
         this.showVoteStats = true;
         // We use localStorage to prevent the user submitting the vote twice
-        if (
-          !JSON.parse(localStorage.getItem("pollsVotedList")) ||
-          JSON.parse(localStorage.getItem("pollsVotedList")).length === 0
-        ) {
-          localStorage.setItem("pollsVotedList", JSON.stringify([this._id]));
-        } else {
-          let prevList = JSON.parse(localStorage.getItem("pollsVotedList"));
-          localStorage.setItem(
-            "pollsVotedList",
-            JSON.stringify([...prevList, this._id])
-          );
+        if (process.browser) {
+          if (
+            !JSON.parse(localStorage.getItem("pollsVotedList")) ||
+            JSON.parse(localStorage.getItem("pollsVotedList")).length === 0
+          ) {
+            localStorage.setItem("pollsVotedList", JSON.stringify([this._id]));
+          } else {
+            let prevList = JSON.parse(localStorage.getItem("pollsVotedList"));
+            localStorage.setItem(
+              "pollsVotedList",
+              JSON.stringify([...prevList, this._id])
+            );
+          }
         }
       }
     }
