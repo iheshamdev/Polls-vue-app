@@ -9,11 +9,9 @@
       <h3>أنشئ تصويتات لا محدودة بشكل مجاني 100٪</h3>
       <p>تساعدك هذه الأداة بإنشاء ومشاركة التصويتات والإستطلاعات بأسهل وأسرع طريقة ممكنة.</p>
     </div>
-    <a
-      href="https://wa.me/?text=urlencodedtext"
-      data-action="share/whatsapp/share"
-    >Share via Whatsapp</a>
-    <a href="https://wa.me/whatsappphonenumber/?text=urlencodedtext">Test</a>
+    <a href="https:/+2-01008901698/wa.me/?text=urlencodedtext">test 1</a>
+    <a href="https://wa.me/?text=urlencodedtext">test 2</a>
+    <a href="https://wa.me/?text=I'm%20inquiring%20about%20the%20apartment%20listing">test 3</a>
   </section>
 </template>
 
