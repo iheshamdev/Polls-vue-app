@@ -10,8 +10,12 @@
       <h3>أنشئ تصويتات لا محدودة بشكل مجاني 100٪</h3>
       <p>تساعدك هذه الأداة بإنشاء ومشاركة التصويتات والإستطلاعات بأسهل وأسرع طريقة ممكنة.</p>
     </div>
-    <a href="https://www.facebook.com/sharer.php?u=https://poll-house.netlify.com/">Facebook</a>
     <a
+      href="https://www.facebook.com/sharer.php?u=https://poll-house.netlify.com/"
+      target="_blank"
+    >Facebook</a>
+    <a
+      target="_blank"
       href="https://twitter.com/intent/tweet?url=https://poll-house.netlify.com/&text=Poll app created by hesham.&hashtags=STC"
     >twitter</a>
   </section>
