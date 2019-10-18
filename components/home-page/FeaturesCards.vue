@@ -11,7 +11,7 @@
     </div>
     <a href="https://wa.me/+2-01008901698/?text=https://poll-house.netlify.com/">test 1</a>
     <a href="https://wa.me/+2-01008901698/?text=hello boys">test 4</a>
-    <a href="https://wa.me/?text=urlencodedtext">test 2</a>
+    <a href="https://wa.me/?text=hello girls">test 2</a>
     <a href="https://wa.me/?text=I'm%20inquiring%20about%20the%20apartment%20listing">test 3</a>
   </section>
 </template>
