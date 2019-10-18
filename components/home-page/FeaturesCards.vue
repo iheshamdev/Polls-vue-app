@@ -9,6 +9,8 @@
       <h3>أنشئ تصويتات لا محدودة بشكل مجاني 100٪</h3>
       <p>تساعدك هذه الأداة بإنشاء ومشاركة التصويتات والإستطلاعات بأسهل وأسرع طريقة ممكنة.</p>
     </div>
+    <a href="web.whatsapp://send?text=hello" data-action="share/whatsapp/share">Share via Whatsapp</a>
+    <a href="https://wa.me/whatsappphonenumber/?text=urlencodedtext">Test</a>
   </section>
 </template>
 

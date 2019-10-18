@@ -101,14 +101,14 @@ export default {
     };
   },
   async created() {
-    const { data } = await GET("https://poll.house/api/polls/random");
-    this.randomData = data;
-    this.randomData.options.forEach(option => (this.pollVotes += option.votes));
-    console.log(data);
-    const DateDiff = require("date-diff");
-    const diff = new DateDiff(new Date(data.endsAt), new Date());
-    this.days = Math.floor(diff.days());
-    this.hours = Math.floor(diff.hours() % 24);
+    // const { data } = await GET("https://poll.house/api/polls/random");
+    // this.randomData = data;
+    // this.randomData.options.forEach(option => (this.pollVotes += option.votes));
+    // console.log(data);
+    // const DateDiff = require("date-diff");
+    // const diff = new DateDiff(new Date(data.endsAt), new Date());
+    // this.days = Math.floor(diff.days());
+    // this.hours = Math.floor(diff.hours() % 24);
   }
 };
 </script>
