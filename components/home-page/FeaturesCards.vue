@@ -9,7 +9,10 @@
       <h3>أنشئ تصويتات لا محدودة بشكل مجاني 100٪</h3>
       <p>تساعدك هذه الأداة بإنشاء ومشاركة التصويتات والإستطلاعات بأسهل وأسرع طريقة ممكنة.</p>
     </div>
-    <a href="web.whatsapp://send?text=hello" data-action="share/whatsapp/share">Share via Whatsapp</a>
+    <a
+      href="https://wa.me/?text=urlencodedtext"
+      data-action="share/whatsapp/share"
+    >Share via Whatsapp</a>
     <a href="https://wa.me/whatsappphonenumber/?text=urlencodedtext">Test</a>
   </section>
 </template>
@@ -38,6 +41,16 @@ export default {};
       color: $darkGrayColor;
       font-size: 18px;
     }
+  }
+  a {
+    height: 46px;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    margin: 8px;
+    border-radius: 5px;
+    background-color: $mainColor;
+    color: #fff;
   }
 }
 </style>
