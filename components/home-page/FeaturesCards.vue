@@ -11,9 +11,11 @@
     </div>
     <a href="https://wa.me/101008901698/?text=https://poll-house.netlify.com/">test 1</a>
     <a href="https://wa.me/101008901698/?text=hello boys">test 5</a>
-    <a href="whatsapp://send?text=urlencodedtext">Test 12</a>
-    <a href="https://wa.me/?text=urlencodedtext">test 9</a>
-    <a href="https://api.whatsapp.com/send?phone=whatsappphonenumber&text=urlencodedtext">Test 4</a>
+    <a href="whatsapp://send?text=https://poll-house.netlify.com/">Test 12</a>
+    <a href="https://wa.me/?text=https://poll-house.netlify.com/">test 9</a>
+    <a
+      href="https://api.whatsapp.com/send?phone=whatsappphonenumber&text=https://poll-house.netlify.com/"
+    >Test 4</a>
     <a
       href="whatsapp://send?text=https://poll-house.netlify.com/"
       data-action="share/whatsapp/share"
