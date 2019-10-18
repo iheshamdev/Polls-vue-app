@@ -9,10 +9,17 @@
       <h3>أنشئ تصويتات لا محدودة بشكل مجاني 100٪</h3>
       <p>تساعدك هذه الأداة بإنشاء ومشاركة التصويتات والإستطلاعات بأسهل وأسرع طريقة ممكنة.</p>
     </div>
-    <a href="https://wa.me/+2-01008901698/?text=https://poll-house.netlify.com/">test 1</a>
-    <a href="https://wa.me/+2-01008901698/?text=hello boys">test 5</a>
+    <a href="https://wa.me/101008901698/?text=https://poll-house.netlify.com/">test 1</a>
+    <a href="https://wa.me/101008901698/?text=hello boys">test 5</a>
+    <a href="whatsapp://send?text=urlencodedtext">Test 12</a>
+    <a href="https://wa.me/?text=urlencodedtext">test 9</a>
+    <a href="https://api.whatsapp.com/send?phone=whatsappphonenumber&text=urlencodedtext">Test 4</a>
+    <a
+      href="whatsapp://send?text=https://poll-house.netlify.com/"
+      data-action="share/whatsapp/share"
+    >test 6</a>
     <a href="https://wa.me/?text=hello girls">test 2</a>
-    <a href="https://wa.me/?text=I'm%20inquiring%20about%20the%20apartment%20listing">test 3</a>
+    <a href="https://wa.me/?text=hello ">test 3</a>
   </section>
 </template>
 
