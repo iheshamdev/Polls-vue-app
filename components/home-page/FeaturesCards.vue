@@ -5,23 +5,15 @@
       <p>تساعدك هذه الأداة بإنشاء ومشاركة التصويتات والإستطلاعات بأسهل وأسرع طريقة ممكنة.</p>
     </div>
 
+    <!-- <a href="whatsapp://send?text=https://poll-house.netlify.com/">Test 12</a> -->
     <div class="card">
       <h3>أنشئ تصويتات لا محدودة بشكل مجاني 100٪</h3>
       <p>تساعدك هذه الأداة بإنشاء ومشاركة التصويتات والإستطلاعات بأسهل وأسرع طريقة ممكنة.</p>
     </div>
-    <a href="https://wa.me/101008901698/?text=https://poll-house.netlify.com/">test 1</a>
-    <a href="https://wa.me/101008901698/?text=hello boys">test 5</a>
-    <a href="whatsapp://send?text=https://poll-house.netlify.com/">Test 12</a>
-    <a href="https://wa.me/?text=https://poll-house.netlify.com/">test 9</a>
+    <a href="https://www.facebook.com/sharer.php?u=https://poll-house.netlify.com/">Facebook</a>
     <a
-      href="https://api.whatsapp.com/send?phone=whatsappphonenumber&text=https://poll-house.netlify.com/"
-    >Test 4</a>
-    <a
-      href="whatsapp://send?text=https://poll-house.netlify.com/"
-      data-action="share/whatsapp/share"
-    >test 6</a>
-    <a href="https://wa.me/?text=hello girls">test 2</a>
-    <a href="https://wa.me/?text=hello ">test 3</a>
+      href="https://twitter.com/intent/tweet?url=https://poll-house.netlify.com/&text=Poll app created by hesham.&hashtags=STC"
+    >twitter</a>
   </section>
 </template>
 
