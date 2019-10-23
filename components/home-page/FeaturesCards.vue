@@ -9,7 +9,7 @@
       <h3>أنشئ تصويتات لا محدودة بشكل مجاني 100٪</h3>
       <p>تساعدك هذه الأداة بإنشاء ومشاركة التصويتات والإستطلاعات بأسهل وأسرع طريقة ممكنة.</p>
     </div>
-    <a href="'whatsapp://send?text=شارك بالتصويت %0a %0a https://poll-house.netlify.com/">WhatsApp</a>
+    <a href="whatsapp://send?text=شارك بالتصويت %0a %0a https://poll-house.netlify.com/">WhatsApp</a>
     <a
       href="https://www.facebook.com/sharer.php?u=https://poll-house.netlify.com/"
       target="_blank"
